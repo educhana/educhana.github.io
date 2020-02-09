@@ -1,0 +1,5 @@
+baseURL = "https://educhana.github.io"
+languageCode = "es-es"
+title = "cdr'ing down thoughts"
+
+theme = "hermit"
