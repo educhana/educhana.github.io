@@ -5,7 +5,8 @@ draft: false
 toc: false
 images:
 tags: 
-  - hugo
+  - azure
+  - terraform
 ---
 Cómo empezar a utilizar Terraform sobre linux para crear infraestructure-as-code en Azure. 
 Resumen y notas a partir de https://docs.microsoft.com/es-es/azure/developer/terraform/install-configure
