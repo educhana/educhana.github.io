@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es-es">
+
+<head>
+  <meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  
+    
+      <meta name="description" content="cdr&#39;ing down thoughts">
+    
+  
+
+
+
+  <meta itemprop="name" content="cdr&#39;ing down thoughts">
+<meta itemprop="description" content="cdr&#39;ing down thoughts">
+
+
+
+  <meta property="og:title" content="cdr&#39;ing down thoughts" />
+<meta property="og:description" content="cdr&#39;ing down thoughts" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://educhana.github.io/" />
+<meta property="og:updated_time" content="2020-05-09T00:00:00+00:00" />
+
+
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="cdr&#39;ing down thoughts"/>
+<meta name="twitter:description" content="cdr&#39;ing down thoughts"/>
+
+
+
+<meta name="generator" content="Hugo 0.69.2" />
+  <title>cdr&#39;ing down thoughts</title>
+  <link rel="canonical" href="/">
+
+
+  <link rel="alternate" type="application/rss+xml" href="/index.xml" title="cdr'ing down thoughts">
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+    
+    
+    
+    
+    
+  
+
+  
+
+
+  
+  <link rel="stylesheet" href="/css/base.min.7a707bd22426d00cde10d242b54c7e8c035bae1c3ad1f2154012f7e6dd066f93.css" integrity="sha256-enB70iQm0AzeENJCtUx&#43;jANbrhw60fIVQBL35t0Gb5M=" crossorigin="anonymous">
+
+
+
+</head>
+
+<body>
+  <nav class="u-background">
+  <div class="u-wrapper">
+    <ul class="Banner">
+      <li class="Banner-item Banner-item--title">
+        <a class="Banner-link u-clickable" href="/">cdr&#39;ing down thoughts</a>
+      </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/about/">About</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/posts/">Blog</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/tags/">Tags</a>
+        </li>
+      
+        <li class="Banner-item">
+          <a class="Banner-link u-clickable" href="/categories/">Categories</a>
+        </li>
+      
+    </ul>
+  </div>
+</nav>
+  <main>
+    <div class="u-wrapper">
+      <div class="u-padding">
+        
+
+  
+
+  
+    <article>
+      <header class="Heading">
+  <h2 class="Heading-title">
+    <a class="Heading-link u-clickable" href="/azure-terraform/" rel="bookmark">Azure Terraform</a>
+  </h2>
+  
+    <time datetime="2020-05-09T20:09:36&#43;02:00">9 May, 2020</time>
+  
+</header>
+      
+        <p>Cómo empezar a utilizar Terraform sobre linux para crear infraestructure-as-code en Azure.
+Resumen y notas a partir de <a href="https://docs.microsoft.com/es-es/azure/developer/terraform/install-configure">https://docs.microsoft.com/es-es/azure/developer/terraform/install-configure</a></p>
+<h3 id="1--instalar-el-cliente-de-azure-httpsdocsmicrosoftcomes-escliazureinstall-azure-cli-aptviewazure-cli-latest">1.- Instalar el cliente de azure (<a href="https://docs.microsoft.com/es-es/cli/azure/install-azure-cli-apt?view=azure-cli-latest">https://docs.microsoft.com/es-es/cli/azure/install-azure-cli-apt?view=azure-cli-latest</a>)</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+</code></pre></div><h3 id="2--instalar-terraform">2.- Instalar Terraform</h3>
+<p>Descargar (<a href="https://www.terraform.io/downloads.html">https://www.terraform.io/downloads.html</a>) descomprimir y meter en el path. Al descomprimir solo hay un ejecutable. Copiar al $HOME/bin</p>
+<h3 id="3--login-en-la-cuenta-de-azure">3.- Login en la cuenta de azure</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">az login
+</code></pre></div><p>Debe devolver información sobre la subscripción</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">[
+  {
+    <span style="color:#f92672">&#34;cloudName&#34;</span>: <span style="color:#e6db74">&#34;AzureCloud&#34;</span>,
+    <span style="color:#f92672">&#34;homeTenantId&#34;</span>: <span style="color:#e6db74">&#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&#34;</span>,
+    <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&#34;</span>,
+    <span style="color:#f92672">&#34;isDefault&#34;</span>: <span style="color:#66d9ef">true</span>,
+    <span style="color:#f92672">&#34;managedByTenants&#34;</span>: [],
+    <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Azure subscription 1&#34;</span>,
+    <span style="color:#f92672">&#34;state&#34;</span>: <span style="color:#e6db74">&#34;Enabled&#34;</span>,
+    <span style="color:#f92672">&#34;tenantId&#34;</span>: <span style="color:#e6db74">&#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&#34;</span>,
+    <span style="color:#f92672">&#34;user&#34;</span>: {
+      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;xx@xxxxx.xxx&#34;</span>,
+      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;user&#34;</span>
+    }
+  }
+]
+</code></pre></div><h2 id="configurar-terraform">Configurar terraform</h2>
+<p><a href="https://docs.microsoft.com/es-es/azure/developer/terraform/install-configure">https://docs.microsoft.com/es-es/azure/developer/terraform/install-configure</a></p>
+<p>Hay que coger el subscription id y guardarlo en una variable</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">az account list --query <span style="color:#e6db74">&#34;[].{name:name, subscriptionId:id, tenantId:tenantId}&#34;</span>
+</code></pre></div><p>Devolverá el subscriptionId</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">[
+  {
+    <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Azure subscription 1&#34;</span>,
+    <span style="color:#f92672">&#34;subscriptionId&#34;</span>: <span style="color:#e6db74">&#34;0077e616-271a-4d26-8bf7-28dedbf0b87c&#34;</span>,
+    <span style="color:#f92672">&#34;tenantId&#34;</span>: <span style="color:#e6db74">&#34;c1f19454-3a2e-4bfa-966e-4e4e72ff7803&#34;</span>
+  }
+]
+</code></pre></div><p>Hay que seleccionar la subscripción con la que queremos trabajar</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">export SUBSCRIPTION_ID<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0077e616-271a-4d26-8bf7-28dedbf0b87c&#34;</span>
+az account set --subscription<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SUBSCRIPTION_ID<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</code></pre></div><p>y crear crear un principal para automatizar de forma segura (recomiendan no usar la cuenta de usuario normal)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">az ad sp create-for-rbac --role<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Contributor&#34;</span> --scopes<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/subscriptions/</span><span style="color:#e6db74">${</span>SUBSCRIPTION_ID<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+  <span style="color:#f92672">&#34;appId&#34;</span>: <span style="color:#e6db74">&#34;xxxxxxxa-xxxx-xxxx-xxxx-xxxxxxxxxxxx&#34;</span>,
+  <span style="color:#f92672">&#34;displayName&#34;</span>: <span style="color:#e6db74">&#34;azure-cli-YYYY-MM-DD-hh-mm-ss&#34;</span>,
+  <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;http://azure-cli-YYYY-MM-DD-hh-mm-ss&#34;</span>,
+  <span style="color:#f92672">&#34;password&#34;</span>: <span style="color:#e6db74">&#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&#34;</span>,
+  <span style="color:#f92672">&#34;tenant&#34;</span>: <span style="color:#e6db74">&#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&#34;</span>
+}
+</code></pre></div><p>HAY QUE GUARDAR ESTOS DATOS!!!!!
+Para ello creamos un script para inicializar variables de entorno (azure.env) en futuras sesiones</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/sh
+</span><span style="color:#75715e"></span>echo <span style="color:#e6db74">&#34;Setting environment variables for Terraform&#34;</span>
+export ARM_SUBSCRIPTION_ID<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&#34;</span>
+export ARM_CLIENT_ID<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&#34;</span>    <span style="color:#75715e">#your_appId</span>
+export ARM_CLIENT_SECRET<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&#34;</span>   <span style="color:#75715e">#your_password</span>
+export ARM_TENANT_ID<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&#34;</span>   <span style="color:#75715e">#your_tenant_id</span>
+
+<span style="color:#75715e"># Not needed for public, required for usgovernment, german, china</span>
+<span style="color:#75715e">#export ARM_ENVIRONMENT=public</span>
+</code></pre></div><p>Para usar la cuenta de usuario ver: <a href="https://www.terraform.io/docs/providers/azurerm/guides/azure_cli.html">https://www.terraform.io/docs/providers/azurerm/guides/azure_cli.html</a></p>
+<p>Definimos en nuestro entorno las variables anteriores.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">source azure.env
+</code></pre></div><p>Ya podriamos ejecutar scripts .tf pero primero hay que inicializar el entorno de terraform (init - descarga los plugins para azure)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">terraform init
+terraform plan
+terraform apply -auto-approve
+</code></pre></div><h3 id="4--crear-una-maquina-virtual">4.- Crear una maquina virtual</h3>
+<p>Páginas relacionadas:</p>
+<ul>
+<li><a href="https://docs.microsoft.com/es-es/azure/developer/terraform/create-linux-virtual-machine-with-infrastructure">https://docs.microsoft.com/es-es/azure/developer/terraform/create-linux-virtual-machine-with-infrastructure</a>)</li>
+<li><a href="https://www.terraform.io/docs/providers/azurerm/">https://www.terraform.io/docs/providers/azurerm/</a></li>
+<li><a href="https://www.terraform.io/docs/providers/azurerm/r/subnet.html">https://www.terraform.io/docs/providers/azurerm/r/subnet.html</a></li>
+</ul>
+<p>Creamos una pequeña maquina virtual Standard_B1s mediante el fichero test.tf.
+Nótese el uso de variables con valores por defecto que nos dan flexibilidad y no tener que repetir valores.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-terraform" data-lang="terraform"><span style="color:#66d9ef">provider</span> <span style="color:#e6db74">&#34;azurerm&#34;</span> {<span style="color:#75715e">
+</span><span style="color:#75715e">  # The &#34;feature&#34; block is required for AzureRM provider 2.x. 
+</span><span style="color:#75715e">  # If you are using version 1.x, the &#34;features&#34; block is not allowed.
+</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">version</span> = <span style="color:#e6db74">&#34;~&gt;2.0&#34;</span>
+  <span style="color:#a6e22e">features</span> {}
+}
+<span style="color:#66d9ef">
+</span><span style="color:#66d9ef">variable</span> <span style="color:#e6db74">&#34;rg&#34;</span> {
+  <span style="color:#a6e22e">type</span> = <span style="color:#a6e22e">string</span>
+  <span style="color:#a6e22e">default</span> = <span style="color:#e6db74">&#34;rgtf&#34;</span>  
+}
+<span style="color:#66d9ef">
+</span><span style="color:#66d9ef">variable</span> <span style="color:#e6db74">&#34;location&#34;</span> {
+  <span style="color:#a6e22e">type</span> = <span style="color:#a6e22e">string</span>
+  <span style="color:#a6e22e">default</span> = <span style="color:#e6db74">&#34;westeurope&#34;</span>
+}
+<span style="color:#66d9ef">
+</span><span style="color:#66d9ef">
+</span><span style="color:#66d9ef">variable</span> <span style="color:#e6db74">&#34;envtag&#34;</span> {
+  <span style="color:#a6e22e">type</span> = <span style="color:#a6e22e">string</span>
+  <span style="color:#a6e22e">default</span> = <span style="color:#e6db74">&#34;Terraform Demo&#34;</span>
+}<span style="color:#75715e">
+</span><span style="color:#75715e">
+</span><span style="color:#75715e">
+</span><span style="color:#75715e">
+</span><span style="color:#75715e"># Create a resource group if it doesn&#39;t exist
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;azurerm_resource_group&#34;</span> <span style="color:#e6db74">&#34;myterraformgroup&#34;</span> {
+    <span style="color:#a6e22e">name</span>     = var.<span style="color:#a6e22e">rg</span>
+    <span style="color:#a6e22e">location</span> = var.<span style="color:#a6e22e">location</span>
+
+    <span style="color:#a6e22e">tags</span> = {
+        <span style="color:#a6e22e">environment</span> = var.<span style="color:#a6e22e">envtag</span>
+    }
+}<span style="color:#75715e">
+</span><span style="color:#75715e">
+</span><span style="color:#75715e"># Create virtual network
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;azurerm_virtual_network&#34;</span> <span style="color:#e6db74">&#34;myterraformnetwork&#34;</span> {
+    <span style="color:#a6e22e">name</span>                = <span style="color:#e6db74">&#34;myVnet&#34;</span>
+    <span style="color:#a6e22e">address_space</span>       = [<span style="color:#e6db74">&#34;10.0.0.0/16&#34;</span>]
+    <span style="color:#a6e22e">location</span>            = var.<span style="color:#a6e22e">location</span>
+    <span style="color:#a6e22e">resource_group_name</span> = <span style="color:#a6e22e">azurerm_resource_group</span>.<span style="color:#a6e22e">myterraformgroup</span>.<span style="color:#a6e22e">name</span>
+
+    <span style="color:#a6e22e">tags</span> = {
+        <span style="color:#a6e22e">environment</span> = var.<span style="color:#a6e22e">envtag</span>
+    }
+}<span style="color:#75715e">
+</span><span style="color:#75715e">
+</span><span style="color:#75715e"># Create subnet
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;azurerm_subnet&#34;</span> <span style="color:#e6db74">&#34;myterraformsubnet&#34;</span> {
+    <span style="color:#a6e22e">name</span>                 = <span style="color:#e6db74">&#34;mySubnet&#34;</span>
+    <span style="color:#a6e22e">resource_group_name</span>  = <span style="color:#a6e22e">azurerm_resource_group</span>.<span style="color:#a6e22e">myterraformgroup</span>.<span style="color:#a6e22e">name</span>
+    <span style="color:#a6e22e">virtual_network_name</span> = <span style="color:#a6e22e">azurerm_virtual_network</span>.<span style="color:#a6e22e">myterraformnetwork</span>.<span style="color:#a6e22e">name</span>
+    <span style="color:#a6e22e">address_prefixes</span>     = [<span style="color:#e6db74">&#34;10.0.1.0/24&#34;</span>]
+}<span style="color:#75715e">
+</span><span style="color:#75715e">
+</span><span style="color:#75715e"># Create public IPs
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;azurerm_public_ip&#34;</span> <span style="color:#e6db74">&#34;myterraformpublicip&#34;</span> {
+    <span style="color:#a6e22e">name</span>                         = <span style="color:#e6db74">&#34;myPublicIP&#34;</span>
+    <span style="color:#a6e22e">location</span>                     = var.<span style="color:#a6e22e">location</span>
+    <span style="color:#a6e22e">resource_group_name</span>          = <span style="color:#a6e22e">azurerm_resource_group</span>.<span style="color:#a6e22e">myterraformgroup</span>.<span style="color:#a6e22e">name</span>
+    <span style="color:#a6e22e">allocation_method</span>            = <span style="color:#e6db74">&#34;Dynamic&#34;</span>
+
+    <span style="color:#a6e22e">tags</span> = {
+        <span style="color:#a6e22e">environment</span> = var.<span style="color:#a6e22e">envtag</span>
+    }
+}<span style="color:#75715e">
+</span><span style="color:#75715e">
+</span><span style="color:#75715e"># Create Network Security Group and rule
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;azurerm_network_security_group&#34;</span> <span style="color:#e6db74">&#34;myterraformnsg&#34;</span> {
+    <span style="color:#a6e22e">name</span>                = <span style="color:#e6db74">&#34;myNetworkSecurityGroup&#34;</span>
+    <span style="color:#a6e22e">location</span>            = var.<span style="color:#a6e22e">location</span>
+    <span style="color:#a6e22e">resource_group_name</span> = <span style="color:#a6e22e">azurerm_resource_group</span>.<span style="color:#a6e22e">myterraformgroup</span>.<span style="color:#a6e22e">name</span>
+    
+    <span style="color:#a6e22e">security_rule</span> {
+        <span style="color:#a6e22e">name</span>                       = <span style="color:#e6db74">&#34;SSH&#34;</span>
+        <span style="color:#a6e22e">priority</span>                   = <span style="color:#ae81ff">1001</span>
+        <span style="color:#a6e22e">direction</span>                  = <span style="color:#e6db74">&#34;Inbound&#34;</span>
+        <span style="color:#a6e22e">access</span>                     = <span style="color:#e6db74">&#34;Allow&#34;</span>
+        <span style="color:#a6e22e">protocol</span>                   = <span style="color:#e6db74">&#34;Tcp&#34;</span>
+        <span style="color:#a6e22e">source_port_range</span>          = <span style="color:#e6db74">&#34;*&#34;</span>
+        <span style="color:#a6e22e">destination_port_range</span>     = <span style="color:#e6db74">&#34;22&#34;</span>
+        <span style="color:#a6e22e">source_address_prefix</span>      = <span style="color:#e6db74">&#34;*&#34;</span>
+        <span style="color:#a6e22e">destination_address_prefix</span> = <span style="color:#e6db74">&#34;*&#34;</span>
+    }
+
+    <span style="color:#a6e22e">tags</span> = {
+        <span style="color:#a6e22e">environment</span> = var.<span style="color:#a6e22e">envtag</span>
+    }
+}<span style="color:#75715e">
+</span><span style="color:#75715e">
+</span><span style="color:#75715e"># Create network interface
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;azurerm_network_interface&#34;</span> <span style="color:#e6db74">&#34;myterraformnic&#34;</span> {
+    <span style="color:#a6e22e">name</span>                      = <span style="color:#e6db74">&#34;myNIC&#34;</span>
+    <span style="color:#a6e22e">location</span>                  = var.<span style="color:#a6e22e">location</span>
+    <span style="color:#a6e22e">resource_group_name</span>       = <span style="color:#a6e22e">azurerm_resource_group</span>.<span style="color:#a6e22e">myterraformgroup</span>.<span style="color:#a6e22e">name</span>
+
+    <span style="color:#a6e22e">ip_configuration</span> {
+        <span style="color:#a6e22e">name</span>                          = <span style="color:#e6db74">&#34;myNicConfiguration&#34;</span>
+        <span style="color:#a6e22e">subnet_id</span>                     = <span style="color:#a6e22e">azurerm_subnet</span>.<span style="color:#a6e22e">myterraformsubnet</span>.<span style="color:#a6e22e">id</span>
+        <span style="color:#a6e22e">private_ip_address_allocation</span> = <span style="color:#e6db74">&#34;Dynamic&#34;</span>
+        <span style="color:#a6e22e">public_ip_address_id</span>          = <span style="color:#a6e22e">azurerm_public_ip</span>.<span style="color:#a6e22e">myterraformpublicip</span>.<span style="color:#a6e22e">id</span>
+    }
+
+    <span style="color:#a6e22e">tags</span> = {
+        <span style="color:#a6e22e">environment</span> = var.<span style="color:#a6e22e">envtag</span>
+    }
+}<span style="color:#75715e">
+</span><span style="color:#75715e">
+</span><span style="color:#75715e"># Connect the security group to the network interface
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;azurerm_network_interface_security_group_association&#34;</span> <span style="color:#e6db74">&#34;example&#34;</span> {
+    <span style="color:#a6e22e">network_interface_id</span>      = <span style="color:#a6e22e">azurerm_network_interface</span>.<span style="color:#a6e22e">myterraformnic</span>.<span style="color:#a6e22e">id</span>
+    <span style="color:#a6e22e">network_security_group_id</span> = <span style="color:#a6e22e">azurerm_network_security_group</span>.<span style="color:#a6e22e">myterraformnsg</span>.<span style="color:#a6e22e">id</span>
+}<span style="color:#75715e">
+</span><span style="color:#75715e">
+</span><span style="color:#75715e"># Generate random text for a unique storage account name
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;random_id&#34;</span> <span style="color:#e6db74">&#34;randomId&#34;</span> {
+    <span style="color:#a6e22e">keepers</span> = {<span style="color:#75715e">
+</span><span style="color:#75715e">        # Generate a new ID only when a new resource group is defined
+</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">resource_group</span> = <span style="color:#a6e22e">azurerm_resource_group</span>.<span style="color:#a6e22e">myterraformgroup</span>.<span style="color:#a6e22e">name</span>
+    }
+    
+    <span style="color:#a6e22e">byte_length</span> = <span style="color:#ae81ff">8</span>
+}<span style="color:#75715e">
+</span><span style="color:#75715e">
+</span><span style="color:#75715e"># Create storage account for boot diagnostics
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;azurerm_storage_account&#34;</span> <span style="color:#e6db74">&#34;mystorageaccount&#34;</span> {
+    <span style="color:#a6e22e">name</span>                        = <span style="color:#e6db74">&#34;diag</span><span style="color:#e6db74">${</span><span style="color:#a6e22e">random_id</span>.<span style="color:#a6e22e">randomId</span>.<span style="color:#a6e22e">hex</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+    <span style="color:#a6e22e">resource_group_name</span>         = <span style="color:#a6e22e">azurerm_resource_group</span>.<span style="color:#a6e22e">myterraformgroup</span>.<span style="color:#a6e22e">name</span>
+    <span style="color:#a6e22e">location</span>                    = var.<span style="color:#a6e22e">location</span>
+    <span style="color:#a6e22e">account_tier</span>                = <span style="color:#e6db74">&#34;Standard&#34;</span>
+    <span style="color:#a6e22e">account_replication_type</span>    = <span style="color:#e6db74">&#34;LRS&#34;</span>
+
+    <span style="color:#a6e22e">tags</span> = {
+        <span style="color:#a6e22e">environment</span> = <span style="color:#e6db74">&#34;Terraform Demo&#34;</span>
+    }
+}<span style="color:#75715e">
+</span><span style="color:#75715e">
+</span><span style="color:#75715e"># Create virtual machine
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;azurerm_linux_virtual_machine&#34;</span> <span style="color:#e6db74">&#34;myterraformvm&#34;</span> {
+    <span style="color:#a6e22e">name</span>                  = <span style="color:#e6db74">&#34;myvm&#34;</span>
+    <span style="color:#a6e22e">location</span>              = var.<span style="color:#a6e22e">location</span>
+    <span style="color:#a6e22e">resource_group_name</span>   = <span style="color:#a6e22e">azurerm_resource_group</span>.<span style="color:#a6e22e">myterraformgroup</span>.<span style="color:#a6e22e">name</span>
+    <span style="color:#a6e22e">network_interface_ids</span> = [<span style="color:#a6e22e">azurerm_network_interface</span>.<span style="color:#a6e22e">myterraformnic</span>.<span style="color:#a6e22e">id</span>]
+    <span style="color:#a6e22e">size</span>                  = <span style="color:#e6db74">&#34;Standard_B1s&#34;</span>
+
+    <span style="color:#a6e22e">os_disk</span> {
+        <span style="color:#a6e22e">name</span>              = <span style="color:#e6db74">&#34;myOsDisk&#34;</span>
+        <span style="color:#a6e22e">caching</span>           = <span style="color:#e6db74">&#34;ReadWrite&#34;</span>
+        <span style="color:#a6e22e">storage_account_type</span> = <span style="color:#e6db74">&#34;Standard_LRS&#34;</span>
+    }
+
+    <span style="color:#a6e22e">source_image_reference</span> {
+        <span style="color:#a6e22e">publisher</span> = <span style="color:#e6db74">&#34;Canonical&#34;</span>
+        <span style="color:#a6e22e">offer</span>     = <span style="color:#e6db74">&#34;UbuntuServer&#34;</span>
+        <span style="color:#a6e22e">sku</span>       = <span style="color:#e6db74">&#34;18.04-LTS&#34;</span>
+        <span style="color:#a6e22e">version</span>   = <span style="color:#e6db74">&#34;latest&#34;</span>
+    }
+
+    <span style="color:#a6e22e">computer_name</span>  = <span style="color:#e6db74">&#34;myvm&#34;</span>
+    <span style="color:#a6e22e">admin_username</span> = <span style="color:#e6db74">&#34;azureuser&#34;</span>
+    <span style="color:#a6e22e">disable_password_authentication</span> = <span style="color:#66d9ef">true</span>
+        
+    <span style="color:#a6e22e">admin_ssh_key</span> {
+        <span style="color:#a6e22e">username</span>       = <span style="color:#e6db74">&#34;azureuser&#34;</span>
+        <span style="color:#a6e22e">public_key</span>     = file(<span style="color:#e6db74">&#34;/home/educhana/.ssh/id_rsa.pub&#34;</span>)
+    }
+
+    <span style="color:#a6e22e">boot_diagnostics</span> {
+        <span style="color:#a6e22e">storage_account_uri</span> = <span style="color:#a6e22e">azurerm_storage_account</span>.<span style="color:#a6e22e">mystorageaccount</span>.<span style="color:#a6e22e">primary_blob_endpoint</span>
+    }
+
+    <span style="color:#a6e22e">tags</span> = {
+        <span style="color:#a6e22e">environment</span> = var.<span style="color:#a6e22e">envtag</span>
+    }
+}
+
+
+</code></pre></div><p>hacemos</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">terraform apply -auto-approve
+</code></pre></div><p>Miramos qué ips tienes las máquinas de nuestro resorce group para conectarnos a ellas</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">az vm show --resource-group rgtf --name myvm -d --query <span style="color:#f92672">[</span>publicIps<span style="color:#f92672">]</span> --output tsv
+
+ssh azureuser@publicIp
+</code></pre></div><p>Para destruir los recursos y vms que hemos creado:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">terraform plan -destroy
+terraform destroy
+</code></pre></div><h3 id="observaciones">Observaciones</h3>
+<h5 id="lista-de-imagenes-para-maquinas">Lista de imagenes para maquinas</h5>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">az vm image list --output table
+</code></pre></div><h4 id="importar-recurso-existente-a-terraform">Importar recurso existente a terraform</h4>
+<p>Cuidado! Terraform pasa a manejar los recursos y los destruirá cuando hagamos un destroy</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">terraform import azurerm_resource_group.myterraformgroup /subscriptions/<span style="color:#e6db74">${</span>ARM_SUBSCRIPTION_ID<span style="color:#e6db74">}</span>/resourceGroups/rgtf
+</code></pre></div><h4 id="utilizar-recursos-ya-existentes-sin-que-terraform-los-maneje">Utilizar recursos ya existentes sin que Terraform los maneje</h4>
+<p>Si no quieres que terraform maneje algun recurso, no hay que incluirlo, sino referenciarlo por su nombre</p>
+<p>En vez de:</p>
+<pre><code>    resource_group_name = azurerm_resource_group.myterraformgroup.name
+</code></pre><p>usar:</p>
+<pre><code>    resource_group_name = &quot;rg1&quot;
+</code></pre>
+      
+      
+
+
+  
+
+  
+
+
+
+
+
+  <footer>
+    
+      
+    
+      
+        <ul class="Tags">
+          
+            <li class="Tags-item u-background">
+              <a class="Tags-link u-clickable" href="/tags/azure/" rel="tag">azure</a>
+            </li>
+          
+            <li class="Tags-item u-background">
+              <a class="Tags-link u-clickable" href="/tags/terraform/" rel="tag">terraform</a>
+            </li>
+          
+        </ul>
+      
+    
+  </footer>
+
+    </article>
+    
+      <div class="Divider"></div>
+    
+  
+
+  
+
+
+
+
+      </div>
+    </div>
+  </main>
+  
+  <footer class="Footer">
+    <div class="u-wrapper">
+      <div class="u-padding">
+        Except where otherwise noted, content on this site is licensed under a a <a href="http://creativecommons.org/licenses/by/4.0/" rel="license"> Creative Commons Attribution 4.0 International License</a>.
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>

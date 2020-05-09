@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?xml-stylesheet type="text/xsl" href="https://educhana.github.io/xml/base.min.xml" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>cdr&#39;ing down thoughts</title>
+    <link>https://educhana.github.io/</link>
+    <description>Recent content on cdr&#39;ing down thoughts</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>es-es</language>
+    <lastBuildDate>Sat, 09 May 2020 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://educhana.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Azure Terraform</title>
+      <link>https://educhana.github.io/azure-terraform/</link>
+      <pubDate>Sat, 09 May 2020 20:09:36 +0200</pubDate>
+      <guid>https://educhana.github.io/azure-terraform/</guid>
+      <description>&lt;p&gt;Cómo empezar a utilizar Terraform sobre linux para crear infraestructure-as-code en Azure.
+Resumen y notas a partir de &lt;a href=&#34;https://docs.microsoft.com/es-es/azure/developer/terraform/install-configure&#34;&gt;https://docs.microsoft.com/es-es/azure/developer/terraform/install-configure&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;1--instalar-el-cliente-de-azure-httpsdocsmicrosoftcomes-escliazureinstall-azure-cli-aptviewazure-cli-latest&#34;&gt;1.- Instalar el cliente de azure (&lt;a href=&#34;https://docs.microsoft.com/es-es/cli/azure/install-azure-cli-apt?view=azure-cli-latest&#34;&gt;https://docs.microsoft.com/es-es/cli/azure/install-azure-cli-apt?view=azure-cli-latest&lt;/a&gt;)&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;2--instalar-terraform&#34;&gt;2.- Instalar Terraform&lt;/h3&gt;
+&lt;p&gt;Descargar (&lt;a href=&#34;https://www.terraform.io/downloads.html&#34;&gt;https://www.terraform.io/downloads.html&lt;/a&gt;) descomprimir y meter en el path. Al descomprimir solo hay un ejecutable. Copiar al $HOME/bin&lt;/p&gt;
+&lt;h3 id=&#34;3--login-en-la-cuenta-de-azure&#34;&gt;3.- Login en la cuenta de azure&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;az login
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Debe devolver información sobre la subscripción&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;[
+  {
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;cloudName&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;AzureCloud&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;homeTenantId&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;id&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;isDefault&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;,
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;managedByTenants&amp;#34;&lt;/span&gt;: [],
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Azure subscription 1&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;state&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Enabled&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;tenantId&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;user&amp;#34;&lt;/span&gt;: {
+      &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;xx@xxxxx.xxx&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;type&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;user&amp;#34;&lt;/span&gt;
+    }
+  }
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;configurar-terraform&#34;&gt;Configurar terraform&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://docs.microsoft.com/es-es/azure/developer/terraform/install-configure&#34;&gt;https://docs.microsoft.com/es-es/azure/developer/terraform/install-configure&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Hay que coger el subscription id y guardarlo en una variable&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;az account list --query &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;[].{name:name, subscriptionId:id, tenantId:tenantId}&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Devolverá el subscriptionId&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;[
+  {
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Azure subscription 1&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;subscriptionId&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;0077e616-271a-4d26-8bf7-28dedbf0b87c&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;tenantId&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;c1f19454-3a2e-4bfa-966e-4e4e72ff7803&amp;#34;&lt;/span&gt;
+  }
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Hay que seleccionar la subscripción con la que queremos trabajar&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;export SUBSCRIPTION_ID&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;0077e616-271a-4d26-8bf7-28dedbf0b87c&amp;#34;&lt;/span&gt;
+az account set --subscription&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;SUBSCRIPTION_ID&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;y crear crear un principal para automatizar de forma segura (recomiendan no usar la cuenta de usuario normal)&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;az ad sp create-for-rbac --role&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Contributor&amp;#34;&lt;/span&gt; --scopes&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/subscriptions/&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;SUBSCRIPTION_ID&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;{
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;appId&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;xxxxxxxa-xxxx-xxxx-xxxx-xxxxxxxxxxxx&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;displayName&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;azure-cli-YYYY-MM-DD-hh-mm-ss&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;http://azure-cli-YYYY-MM-DD-hh-mm-ss&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;password&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;tenant&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&amp;#34;&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;HAY QUE GUARDAR ESTOS DATOS!!!!!
+Para ello creamos un script para inicializar variables de entorno (azure.env) en futuras sesiones&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/bin/sh
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Setting environment variables for Terraform&amp;#34;&lt;/span&gt;
+export ARM_SUBSCRIPTION_ID&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&amp;#34;&lt;/span&gt;
+export ARM_CLIENT_ID&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&amp;#34;&lt;/span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;#your_appId&lt;/span&gt;
+export ARM_CLIENT_SECRET&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&amp;#34;&lt;/span&gt;   &lt;span style=&#34;color:#75715e&#34;&gt;#your_password&lt;/span&gt;
+export ARM_TENANT_ID&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&amp;#34;&lt;/span&gt;   &lt;span style=&#34;color:#75715e&#34;&gt;#your_tenant_id&lt;/span&gt;
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Not needed for public, required for usgovernment, german, china&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;#export ARM_ENVIRONMENT=public&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Para usar la cuenta de usuario ver: &lt;a href=&#34;https://www.terraform.io/docs/providers/azurerm/guides/azure_cli.html&#34;&gt;https://www.terraform.io/docs/providers/azurerm/guides/azure_cli.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Definimos en nuestro entorno las variables anteriores.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;source azure.env
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Ya podriamos ejecutar scripts .tf pero primero hay que inicializar el entorno de terraform (init - descarga los plugins para azure)&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;terraform init
+terraform plan
+terraform apply -auto-approve
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;4--crear-una-maquina-virtual&#34;&gt;4.- Crear una maquina virtual&lt;/h3&gt;
+&lt;p&gt;Páginas relacionadas:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.microsoft.com/es-es/azure/developer/terraform/create-linux-virtual-machine-with-infrastructure&#34;&gt;https://docs.microsoft.com/es-es/azure/developer/terraform/create-linux-virtual-machine-with-infrastructure&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.terraform.io/docs/providers/azurerm/&#34;&gt;https://www.terraform.io/docs/providers/azurerm/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.terraform.io/docs/providers/azurerm/r/subnet.html&#34;&gt;https://www.terraform.io/docs/providers/azurerm/r/subnet.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Creamos una pequeña maquina virtual Standard_B1s mediante el fichero test.tf.
+Nótese el uso de variables con valores por defecto que nos dan flexibilidad y no tener que repetir valores.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-terraform&#34; data-lang=&#34;terraform&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;provider&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;azurerm&amp;#34;&lt;/span&gt; {&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;  # The &amp;#34;feature&amp;#34; block is required for AzureRM provider 2.x. 
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;  # If you are using version 1.x, the &amp;#34;features&amp;#34; block is not allowed.
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;version&lt;/span&gt; = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;~&amp;gt;2.0&amp;#34;&lt;/span&gt;
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;features&lt;/span&gt; {}
+}
+&lt;span style=&#34;color:#66d9ef&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;variable&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;rg&amp;#34;&lt;/span&gt; {
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;type&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;string&lt;/span&gt;
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;default&lt;/span&gt; = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;rgtf&amp;#34;&lt;/span&gt;  
+}
+&lt;span style=&#34;color:#66d9ef&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;variable&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;location&amp;#34;&lt;/span&gt; {
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;type&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;string&lt;/span&gt;
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;default&lt;/span&gt; = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;westeurope&amp;#34;&lt;/span&gt;
+}
+&lt;span style=&#34;color:#66d9ef&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;variable&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;envtag&amp;#34;&lt;/span&gt; {
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;type&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;string&lt;/span&gt;
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;default&lt;/span&gt; = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Terraform Demo&amp;#34;&lt;/span&gt;
+}&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Create a resource group if it doesn&amp;#39;t exist
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;resource&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;azurerm_resource_group&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;myterraformgroup&amp;#34;&lt;/span&gt; {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;     = var.&lt;span style=&#34;color:#a6e22e&#34;&gt;rg&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;location&lt;/span&gt; = var.&lt;span style=&#34;color:#a6e22e&#34;&gt;location&lt;/span&gt;
+
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;tags&lt;/span&gt; = {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;environment&lt;/span&gt; = var.&lt;span style=&#34;color:#a6e22e&#34;&gt;envtag&lt;/span&gt;
+    }
+}&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Create virtual network
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;resource&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;azurerm_virtual_network&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;myterraformnetwork&amp;#34;&lt;/span&gt; {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;                = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;myVnet&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;address_space&lt;/span&gt;       = [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;10.0.0.0/16&amp;#34;&lt;/span&gt;]
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;location&lt;/span&gt;            = var.&lt;span style=&#34;color:#a6e22e&#34;&gt;location&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;resource_group_name&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;azurerm_resource_group&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;myterraformgroup&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;
+
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;tags&lt;/span&gt; = {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;environment&lt;/span&gt; = var.&lt;span style=&#34;color:#a6e22e&#34;&gt;envtag&lt;/span&gt;
+    }
+}&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Create subnet
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;resource&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;azurerm_subnet&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;myterraformsubnet&amp;#34;&lt;/span&gt; {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;                 = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mySubnet&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;resource_group_name&lt;/span&gt;  = &lt;span style=&#34;color:#a6e22e&#34;&gt;azurerm_resource_group&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;myterraformgroup&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;virtual_network_name&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;azurerm_virtual_network&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;myterraformnetwork&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;address_prefixes&lt;/span&gt;     = [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;10.0.1.0/24&amp;#34;&lt;/span&gt;]
+}&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Create public IPs
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;resource&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;azurerm_public_ip&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;myterraformpublicip&amp;#34;&lt;/span&gt; {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;                         = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;myPublicIP&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;location&lt;/span&gt;                     = var.&lt;span style=&#34;color:#a6e22e&#34;&gt;location&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;resource_group_name&lt;/span&gt;          = &lt;span style=&#34;color:#a6e22e&#34;&gt;azurerm_resource_group&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;myterraformgroup&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;allocation_method&lt;/span&gt;            = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Dynamic&amp;#34;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;tags&lt;/span&gt; = {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;environment&lt;/span&gt; = var.&lt;span style=&#34;color:#a6e22e&#34;&gt;envtag&lt;/span&gt;
+    }
+}&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Create Network Security Group and rule
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;resource&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;azurerm_network_security_group&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;myterraformnsg&amp;#34;&lt;/span&gt; {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;                = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;myNetworkSecurityGroup&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;location&lt;/span&gt;            = var.&lt;span style=&#34;color:#a6e22e&#34;&gt;location&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;resource_group_name&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;azurerm_resource_group&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;myterraformgroup&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;
+    
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;security_rule&lt;/span&gt; {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;                       = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;SSH&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;priority&lt;/span&gt;                   = &lt;span style=&#34;color:#ae81ff&#34;&gt;1001&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;direction&lt;/span&gt;                  = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Inbound&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;access&lt;/span&gt;                     = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Allow&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;protocol&lt;/span&gt;                   = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Tcp&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;source_port_range&lt;/span&gt;          = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;*&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;destination_port_range&lt;/span&gt;     = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;22&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;source_address_prefix&lt;/span&gt;      = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;*&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;destination_address_prefix&lt;/span&gt; = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;*&amp;#34;&lt;/span&gt;
+    }
+
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;tags&lt;/span&gt; = {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;environment&lt;/span&gt; = var.&lt;span style=&#34;color:#a6e22e&#34;&gt;envtag&lt;/span&gt;
+    }
+}&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Create network interface
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;resource&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;azurerm_network_interface&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;myterraformnic&amp;#34;&lt;/span&gt; {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;                      = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;myNIC&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;location&lt;/span&gt;                  = var.&lt;span style=&#34;color:#a6e22e&#34;&gt;location&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;resource_group_name&lt;/span&gt;       = &lt;span style=&#34;color:#a6e22e&#34;&gt;azurerm_resource_group&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;myterraformgroup&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;
+
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;ip_configuration&lt;/span&gt; {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;                          = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;myNicConfiguration&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;subnet_id&lt;/span&gt;                     = &lt;span style=&#34;color:#a6e22e&#34;&gt;azurerm_subnet&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;myterraformsubnet&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;id&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;private_ip_address_allocation&lt;/span&gt; = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Dynamic&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;public_ip_address_id&lt;/span&gt;          = &lt;span style=&#34;color:#a6e22e&#34;&gt;azurerm_public_ip&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;myterraformpublicip&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;id&lt;/span&gt;
+    }
+
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;tags&lt;/span&gt; = {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;environment&lt;/span&gt; = var.&lt;span style=&#34;color:#a6e22e&#34;&gt;envtag&lt;/span&gt;
+    }
+}&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Connect the security group to the network interface
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;resource&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;azurerm_network_interface_security_group_association&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;example&amp;#34;&lt;/span&gt; {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;network_interface_id&lt;/span&gt;      = &lt;span style=&#34;color:#a6e22e&#34;&gt;azurerm_network_interface&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;myterraformnic&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;id&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;network_security_group_id&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;azurerm_network_security_group&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;myterraformnsg&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;id&lt;/span&gt;
+}&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Generate random text for a unique storage account name
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;resource&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;random_id&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;randomId&amp;#34;&lt;/span&gt; {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;keepers&lt;/span&gt; = {&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;        # Generate a new ID only when a new resource group is defined
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#a6e22e&#34;&gt;resource_group&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;azurerm_resource_group&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;myterraformgroup&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;
+    }
+    
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;byte_length&lt;/span&gt; = &lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;
+}&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Create storage account for boot diagnostics
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;resource&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;azurerm_storage_account&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mystorageaccount&amp;#34;&lt;/span&gt; {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;                        = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;diag&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;random_id&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;randomId&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;hex&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;resource_group_name&lt;/span&gt;         = &lt;span style=&#34;color:#a6e22e&#34;&gt;azurerm_resource_group&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;myterraformgroup&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;location&lt;/span&gt;                    = var.&lt;span style=&#34;color:#a6e22e&#34;&gt;location&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;account_tier&lt;/span&gt;                = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Standard&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;account_replication_type&lt;/span&gt;    = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;LRS&amp;#34;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;tags&lt;/span&gt; = {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;environment&lt;/span&gt; = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Terraform Demo&amp;#34;&lt;/span&gt;
+    }
+}&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Create virtual machine
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;resource&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;azurerm_linux_virtual_machine&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;myterraformvm&amp;#34;&lt;/span&gt; {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;                  = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;myvm&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;location&lt;/span&gt;              = var.&lt;span style=&#34;color:#a6e22e&#34;&gt;location&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;resource_group_name&lt;/span&gt;   = &lt;span style=&#34;color:#a6e22e&#34;&gt;azurerm_resource_group&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;myterraformgroup&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;network_interface_ids&lt;/span&gt; = [&lt;span style=&#34;color:#a6e22e&#34;&gt;azurerm_network_interface&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;myterraformnic&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;id&lt;/span&gt;]
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;size&lt;/span&gt;                  = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Standard_B1s&amp;#34;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;os_disk&lt;/span&gt; {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;              = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;myOsDisk&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;caching&lt;/span&gt;           = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ReadWrite&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;storage_account_type&lt;/span&gt; = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Standard_LRS&amp;#34;&lt;/span&gt;
+    }
+
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;source_image_reference&lt;/span&gt; {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;publisher&lt;/span&gt; = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Canonical&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;offer&lt;/span&gt;     = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;UbuntuServer&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;sku&lt;/span&gt;       = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;18.04-LTS&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;version&lt;/span&gt;   = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;latest&amp;#34;&lt;/span&gt;
+    }
+
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;computer_name&lt;/span&gt;  = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;myvm&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;admin_username&lt;/span&gt; = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;azureuser&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;disable_password_authentication&lt;/span&gt; = &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;
+        
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;admin_ssh_key&lt;/span&gt; {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;username&lt;/span&gt;       = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;azureuser&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;public_key&lt;/span&gt;     = file(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/home/educhana/.ssh/id_rsa.pub&amp;#34;&lt;/span&gt;)
+    }
+
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;boot_diagnostics&lt;/span&gt; {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;storage_account_uri&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;azurerm_storage_account&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;mystorageaccount&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;primary_blob_endpoint&lt;/span&gt;
+    }
+
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;tags&lt;/span&gt; = {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;environment&lt;/span&gt; = var.&lt;span style=&#34;color:#a6e22e&#34;&gt;envtag&lt;/span&gt;
+    }
+}
+
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;hacemos&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;terraform apply -auto-approve
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Miramos qué ips tienes las máquinas de nuestro resorce group para conectarnos a ellas&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;az vm show --resource-group rgtf --name myvm -d --query &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;publicIps&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; --output tsv
+
+ssh azureuser@publicIp
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Para destruir los recursos y vms que hemos creado:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;terraform plan -destroy
+terraform destroy
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;observaciones&#34;&gt;Observaciones&lt;/h3&gt;
+&lt;h5 id=&#34;lista-de-imagenes-para-maquinas&#34;&gt;Lista de imagenes para maquinas&lt;/h5&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;az vm image list --output table
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;importar-recurso-existente-a-terraform&#34;&gt;Importar recurso existente a terraform&lt;/h4&gt;
+&lt;p&gt;Cuidado! Terraform pasa a manejar los recursos y los destruirá cuando hagamos un destroy&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;terraform import azurerm_resource_group.myterraformgroup /subscriptions/&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;ARM_SUBSCRIPTION_ID&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;/resourceGroups/rgtf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;utilizar-recursos-ya-existentes-sin-que-terraform-los-maneje&#34;&gt;Utilizar recursos ya existentes sin que Terraform los maneje&lt;/h4&gt;
+&lt;p&gt;Si no quieres que terraform maneje algun recurso, no hay que incluirlo, sino referenciarlo por su nombre&lt;/p&gt;
+&lt;p&gt;En vez de:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;    resource_group_name = azurerm_resource_group.myterraformgroup.name
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;usar:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;    resource_group_name = &amp;quot;rg1&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+  </channel>
+</rss>
