@@ -1,6 +1,6 @@
 ---
 title: "Azure Terraform"
-date: 2020-05-09T21:18:30+02:00
+date: 2020-05-09T20:09:36+02:00
 draft: false
 toc: false
 images:
