@@ -5,7 +5,7 @@ draft: false
 toc: false
 images:
 tags: 
-  - untagged
+  - hugo
 ---
 Traspaso el blog a Hugo. Bastante sencillo.
 
